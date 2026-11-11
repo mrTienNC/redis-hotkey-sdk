@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.tiennguyen16297</groupId>
+        <artifactId>redis-hotkey-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>redis-hotkey-spring-boot-starter</artifactId>
+    <name>redis-hotkey-spring-boot-starter</name>
+    <description>Auto-configuration for Spring Boot 2.0+ and 3.x: just declare the exporter names</description>
+
+    <properties>
+        <!-- Compile against the lowest supported Boot version; runs on Boot 2.x/3.x because it only uses stable APIs -->
+        <spring-boot.version>2.0.9.RELEASE</spring-boot.version>
+    </properties>
+
+    <profiles>
+        <!-- Spring 5.0 (Boot 2.0) uses an old CGLIB, so java.lang must be opened when RUNNING TESTS on JDK 9+.
+             This only affects tests; real Java 8 applications do not need it. -->
+        <profile>
+            <id>jdk9plus-tests</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.tiennguyen16297</groupId>
+            <artifactId>redis-hotkey-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.24.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

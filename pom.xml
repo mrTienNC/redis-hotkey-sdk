@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.tiennguyen16297</groupId>
+    <artifactId>redis-hotkey-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>redis-hotkey-parent</name>
+    <description>Client-side SDK for detecting Redis hot keys (Java 8+, Spring Boot 2.0+)</description>
+    <url>https://github.com/${github.user}/redis-hotkey-sdk</url>
+    <inceptionYear>2026</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>YOUR_NAME</name>
+            <email>YOUR_EMAIL</email>
+            <url>https://github.com/${github.user}</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/${github.user}/redis-hotkey-sdk.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/${github.user}/redis-hotkey-sdk.git</developerConnection>
+        <url>https://github.com/${github.user}/redis-hotkey-sdk</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <modules>
+        <module>redis-hotkey-core</module>
+        <module>redis-hotkey-jedis</module>
+        <module>redis-hotkey-spring-boot-starter</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Compile with release 8: JDK 9+ will then reject use of Java 9+ APIs at compile time -->
+        <maven.compiler.release>8</maven.compiler.release>
+        <junit.version>5.9.3</junit.version>
+        <!-- GitHub user that owns the repository -->
+        <github.user>tiennguyen16297</github.user>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.tiennguyen16297</groupId>
+                <artifactId>redis-hotkey-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.tiennguyen16297</groupId>
+                <artifactId>redis-hotkey-jedis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Maven Central release: mvn -Prelease clean deploy  (needs JDK 9+, a GPG key and a Central Portal token) -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <configuration>
+                            <release>8</release>
+                            <doclint>none</doclint>
+                            <quiet>true</quiet>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Needed for non-interactive signing with GnuPG 2.1+ -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- Must match the server id in ~/.m2/settings.xml that holds your Central Portal token -->
+                            <publishingServerId>central</publishingServerId>
+                            <!-- Upload only; review and click Publish in the portal. Set to true to publish automatically -->
+                            <autoPublish>false</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
