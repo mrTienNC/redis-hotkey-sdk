@@ -36,12 +36,12 @@ Jedis ──writes──> MonitoredSocket ──> Redis
 
 ```xml
 <dependency>
-    <groupId>io.github.tiennguyen16297</groupId>
+    <groupId>io.github.mrtiennc</groupId>
     <artifactId>redis-hotkey-jedis</artifactId>
     <version>1.0.0</version>
 </dependency>
 <dependency>
-    <groupId>io.github.tiennguyen16297</groupId>
+    <groupId>io.github.mrtiennc</groupId>
     <artifactId>redis-hotkey-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -155,7 +155,7 @@ One-time setup:
 ```
 
 3. Create a GPG key, publish the public key (`gpg --keyserver keyserver.ubuntu.com --send-keys <KEY_ID>`) and make it available to `gpg` when signing.
-4. In the root `pom.xml` fill in the `<developers>` entry (name and email). `github.user` and the `groupId` (`io.github.tiennguyen16297`) are already set.
+4. In the root `pom.xml` fill in the `<developers>` entry (name and email). `github.user` and the `groupId` (`io.github.mrtiennc`) are already set.
 
 Release:
 
